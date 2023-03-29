@@ -1,0 +1,78 @@
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+class Animal {
+public:
+    // Конструктор без параметрів
+    Animal() : name(""), species(""), weight(0) {
+        cout << "Created a new animal" << endl;
+    }
+
+    // Конструктор з параметрами
+    Animal(string n, string s, int w) : name(n), species(s), weight(w) {
+        cout << "Created a new animal with parameters" << endl;
+    }
+
+    // Конструктор з одним параметром
+    Animal(string n) : name(n), species(""), weight(0) {
+        cout << "Created a new animal with one parameter" << endl;
+    }
+
+    // Конструктор копіювання
+    Animal(const Animal& other) : name(other.name), species(other.species), weight(other.weight) {
+        cout << "Created a new animal by copying" << endl;
+    }
+
+    // Деструктор
+    ~Animal() {
+        cout << "Destroyed an animal" << endl;
+    }
+
+    // Селектори та модифікатори
+    string getName() const { return name; }
+    void setName(string n) { name = n; }
+    string getSpecies() const { return species; }
+    void setSpecies(string s) { species = s; }
+    int getWeight() const { return weight; }
+    void setWeight(int w) { weight = w; }
+
+    // Метод toString()
+    string toString() const {
+        return name + " is a " + species + " and weighs " + to_string(weight) + " kg";
+    }
+
+private:
+    string name;
+    string species;
+    int weight;
+};
+
+// Вказівник на метод
+typedef string(Animal::* ToStringMethod)() const;
+
+int main() {
+    // Створення об'єкту з використанням конструктора з параметрами
+    Animal a1("Dog", "Canine", 20);
+    cout << a1.toString() << endl;
+
+    // Створення об'єкту з використанням конструктора з одним параметром
+    Animal a2 = string("Cat");
+    cout << a2.toString() << endl;
+
+    // Створення об'єкту з використанням конструктора копіювання
+    Animal a3 = a1;
+    cout << a3.toString() << endl;
+
+    // Використання вказівника на метод
+    ToStringMethod toStringMethod = &Animal::toString;
+    cout << (a1.*toStringMethod)() << endl;
+
+    // Використання вказівника на об'єкт
+    Animal* a4 = new Animal("Elephant", "Pachyderm", 5000);
+    cout << a4->toString() << endl;
+    delete a4;
+
+    return 0;
+}
