@@ -1,0 +1,104 @@
+#include <iostream>
+
+using namespace std;
+
+const int MAX_SIZE = 50;
+
+class Set {
+private:
+  char* arr;
+  int maxSize;
+  int currentSize;
+public:
+  // Empty constructor
+  Set() {
+    maxSize = MAX_SIZE;
+    currentSize = 0;
+  }
+  // Constructor to add a char
+  Set(char ch) {
+    maxSize = MAX_SIZE;
+    arr[0] = ch;
+    currentSize = 1;
+  }
+  // Constructor to add an array
+  Set(const char* second) {
+    for (int i = 0; i < sizeof(second) / sizeof(second[0]); i++) {
+      arr[i] = second[i];
+      currentSize++;
+    }
+  }
+  // Constructor to copy objects
+  Set(const Set& copy) {
+    this->maxSize = copy.maxSize;
+    this->currentSize = copy.currentSize;
+    this->arr = copy.arr;
+  }
+  void add(char ch) {
+    if (currentSize + 1 <= maxSize) {
+      arr[currentSize] = ch;
+      currentSize++;
+    }
+    else {
+      cout << "The array is already full" << endl;
+    }
+  }
+  void remove(char ch) {
+    if (inArray(ch)) {
+      for (int i = find(ch); i < currentSize - 1; i++) {
+        arr[i] = arr[i + 1];
+      }
+      currentSize--;
+    }
+    else
+      cout << "The character is not in the array" << endl;
+  }
+  int find(char ch) {
+    for (int i = 0; i < currentSize; i++) {
+      if (arr[i] == ch) {
+        return i;
+      }
+    }
+    return -1;
+  }
+  bool inArray(char ch) {
+    for (int i = 0; i < currentSize; i++) {
+      if (arr[i] == ch) {
+        return 1;
+      }
+    }
+    return 0;
+  }
+  void show() {
+    for (int i = 0; i < currentSize; i++) {
+      cout << i + 1 << ". " << arr[i] << endl;
+    }
+  }
+  void operator()(const char* second) {
+    for (int i = 0; i < sizeof(second) / sizeof(second[0]); i++) {
+      add(second[i]);
+    }
+  }
+  Set operator+(const Set& second) {
+    Set c;
+    if (this->currentSize + second.currentSize > this->maxSize) {
+      cout << "The size of objects will be larger than the maximum" << endl;
+      return c;
+    }
+    for (int i = 0; i < this->currentSize; i++) {
+      c.add(arr[i]);
+    }
+    for (int i = 0; i < second.currentSize; i++) {
+      c.add(second.arr[i]);
+    }
+    return c;
+  }
+  bool operator<=(const Set& second) {
+    if (this->currentSize <= second.currentSize) {
+      return 1;
+    }
+    return 0;
+  }
+
+};
+
