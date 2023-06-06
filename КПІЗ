@@ -1,0 +1,189 @@
+#include <iostream>
+using namespace std;
+
+// Шаблон класу списку
+template <typename T>
+class List {
+private:
+    struct Node {
+        T data;
+        Node* next;
+        Node(const T& value) : data(value), next(nullptr) {}
+    };
+
+    Node* head;
+    int size;
+
+public:
+    List() : head(nullptr), size(0) {}
+
+    void add(const T& value) {
+        Node* newNode = new Node(value);
+        if (head == nullptr) {
+            head = newNode;
+        } else {
+            Node* current = head;
+            while (current->next != nullptr) {
+                current = current->next;
+            }
+            current->next = newNode;
+        }
+        size++;
+    }
+
+    void display() const {
+        Node* current = head;
+        while (current != nullptr) {
+            cout << current->data << " ";
+            current = current->next;
+        }
+        cout << endl;
+    }
+
+    int getSize() const {
+        return size;
+    }
+};
+
+// Користувацький клас ТВАРИНА
+class Animal {
+private:
+    string name;
+public:
+    Animal(const string& animalName) : name(animalName) {}
+
+    string getName() const {
+        return name;
+    }
+};
+
+// Перевантаження оператора виводу для класу ТВАРИНА
+ostream& operator<<(ostream& os, const Animal& animal) {
+    os << animal.getName();
+    return os;
+}
+
+// Шаблон класу масиву
+template <typename T>
+class Array {
+private:
+    T* elements;
+    int size;
+
+public:
+    Array(int arraySize) : size(arraySize) {
+        elements = new T[size];
+    }
+
+    ~Array() {
+        delete[] elements;
+    }
+
+    T& operator[](int index) {
+        return elements[index];
+    }
+
+    const T& operator[](int index) const {
+        return elements[index];
+    }
+};
+
+// Користувацький клас "Комплексне число"
+class Complex {
+private:
+    int re; // дійсна частина
+    int im; // уявна частина
+public:
+    Complex(int real, int imaginary) : re(real), im(imaginary) {}
+
+    int getReal() const {
+        return re;
+    }
+
+    int getImaginary() const {
+        return im;
+    }
+};
+
+// Перевантаження оператора виводу для класу "Комплексне число"
+ostream& operator<<(ostream& os, const Complex& complex) {
+    os << complex.getReal() << " + " << complex.getImaginary() << "i";
+    return os;
+}
+
+int main() {
+    // Тестування шаблону списку зі символьним типом
+    List<char> charList;
+    charList.add('A');
+    charList.add('B');
+    charList.add('C');
+    cout << "Char List: ";
+    charList.display();
+    cout << "Size: " << charList.getSize() << endl;
+
+    // Тестування шаблону списку зі цілим типом
+    List<int> intList;
+    intList.add(1);
+    intList.add(2);
+    intList.add(3);
+    cout << "Int List: ";
+    intList.display();
+    cout << "Size: " << intList.getSize() << endl;
+
+    // Тестування шаблону списку з дійсним типом
+    List<double> doubleList;
+    doubleList.add(1.5);
+    doubleList.add(2.5);
+    doubleList.add(3.5);
+    cout << "Double List: ";
+    doubleList.display();
+    cout << "Size: " << doubleList.getSize() << endl;
+
+    // Тестування шаблону списку з користувацьким типом
+    List<Animal> animalList;
+    Animal cat("Cat");
+    Animal dog("Dog");
+    animalList.add(cat);
+    animalList.add(dog);
+    cout << "Animal List: ";
+    animalList.display();
+    cout << "Size: " << animalList.getSize() << endl;
+
+    // Тестування шаблону масиву з цілим типом
+    Array<int> intArray(3);
+    intArray[0] = 1;
+    intArray[1] = 2;
+    intArray[2] = 3;
+    cout << "Int Array: ";
+    for (int i = 0; i < 3; i++) {
+        cout << intArray[i] << " ";
+    }
+    cout << endl;
+
+    // Тестування шаблону масиву з дійсним типом
+    Array<double> doubleArray(3);
+    doubleArray[0] = 1.5;
+    doubleArray[1] = 2.5;
+    doubleArray[2] = 3.5;
+    cout << "Double Array: ";
+    for (int i = 0; i < 3; i++) {
+        cout << doubleArray[i] << " ";
+    }
+    cout << endl;
+
+    // Тестування шаблону масиву з користувацьким типом
+    Array<Complex> complexArray(3);
+    Complex c1(1, 2);
+    Complex c2(3, 4);
+    Complex c3(5, 6);
+    complexArray[0] = c1;
+    complexArray[1] = c2;
+    complexArray[2] = c3;
+    cout << "Complex Array: ";
+    for (int i = 0; i < 3; i++) {
+        cout << complexArray[i] << " ";
+    }
+    cout << endl;
+
+    return 0;
+}
